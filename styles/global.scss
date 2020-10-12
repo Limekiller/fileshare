@@ -1,0 +1,48 @@
+html, body {
+    padding: 0;
+    margin: 0;
+    font-family: korolev, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+a {
+    color:black;
+    text-decoration: none;
+}
+a:hover {
+    cursor: pointer;
+    color:#65ffcc;
+}
+button, .button {
+    padding:10px;
+    border-radius: 10px;
+    background: #65ffcc;
+    margin-top: 20px;
+    display: inline-block;
+    border: none;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    
+}
+main {
+    width:80%;
+    margin: 0 auto;
+    text-align:center;
+}
+
+.flex {
+    display: flex;
+
+    &.spaceAround {
+        justify-content: space-around;
+    }
+    &.center {
+        justify-content: center;
+    }
+    &.wrap {
+        flex-wrap: wrap;
+    }
+}
+
+@import url("https://use.typekit.net/phn1xtz.css");
