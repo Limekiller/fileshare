@@ -17,7 +17,7 @@ export default function Footer() {
                 </Link>
 
             </div>
-            <a href='https://bryceyoder.com'>
+            <a className={styles.siteLogo} href='https://bryceyoder.com'>
                 <img src="/images/logo.svg" alt="Bryce Yoder"/>
             </a>
         </footer>

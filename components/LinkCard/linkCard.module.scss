@@ -9,4 +9,9 @@
         font-size: 70px;
         width: 70px;
     }
+
+    @media (max-width: 500px) {
+        margin: 0;
+        margin-top: 40px;
+    }
 }

@@ -74,7 +74,7 @@ export default class UploadBox extends Component {
                         </div>
                     ))}
                 </div>
-                <div className="flex center">
+                <div className="flex center pad-bottom">
                     <button onClick={e => this.uploadFiles(e)}>Upload</button>
                 </div>
             </>

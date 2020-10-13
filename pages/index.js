@@ -9,6 +9,7 @@ export default function Home() {
       <Head>
         <title>FILESHARE</title>
         <link rel="icon" href="/favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
       <main>
@@ -17,7 +18,7 @@ export default function Home() {
           text = 'Upload some files to share, or download files with a code.'
         />
 
-        <div className="flex center">
+        <div className="flex center col-mobile pad-bottom">
           <LinkCard
             faStyles='fas fa-file-upload'
             title='Share Files'

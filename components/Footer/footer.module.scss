@@ -10,7 +10,7 @@
     box-sizing: border-box;
     pointer-events: none;
 
-    a {
+    a:not(.siteLogo) {
         font-size:25px;
         pointer-events: all;
         margin-right:20px;
@@ -22,5 +22,9 @@
 
     img {
         height:50px;
+    }
+
+    @media (max-width: 500px) {
+        padding: 0px 5px 0px 5px;
     }
 }

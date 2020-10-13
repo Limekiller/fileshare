@@ -43,6 +43,21 @@ main {
     &.wrap {
         flex-wrap: wrap;
     }
+    &.col-mobile {
+        @media (max-width: 500px) {
+            flex-direction: column;
+        }
+    }
+}
+
+.pad-bottom {
+    padding-bottom: 120px;
+}
+
+@media screen and (max-width:1200px) {
+    main {
+        width: 95%;
+    }
 }
 
 @import url("https://use.typekit.net/phn1xtz.css");

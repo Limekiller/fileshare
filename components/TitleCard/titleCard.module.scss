@@ -14,4 +14,19 @@
         font-size: 20px;
         margin: 0;
     }
+
+    @media (max-width: 1200px) {
+
+        h1 {
+            font-size: 90px;
+        }
+    }
+    @media (max-width: 500px) {
+        padding: 0px;
+        width:100%;
+
+        h1 {
+            font-size: 20vw;
+        }
+    }
 }
