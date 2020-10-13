@@ -66,9 +66,10 @@ const downloadSuccess = (props) => {
 
             <style jsx>{`
                 h1 {
-                    font-size: 130px;
+                    width: 180px;
                     color: #65ffcc;
-                    margin:0;
+                    margin:0 auto;
+                    font-size: 130px;
                 }
                 h2 {
                     font-size: 50px;
