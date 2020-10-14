@@ -54,6 +54,7 @@ const downloadSuccess = (props) => {
             <Head>
                 <title>SHARE</title>
                 <link rel="icon" href="/favicon.ico" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             </Head>
 
             <Layout>
@@ -74,6 +75,15 @@ const downloadSuccess = (props) => {
                 h2 {
                     font-size: 50px;
                     margin-top:15vh;
+                }
+
+                @media (max-width: 500px) {
+                    h1 {
+                        font-size: 110px;
+                    }
+                    h2 {
+                        font-size: 40px;
+                    }
                 }
             `}</style>
         </>

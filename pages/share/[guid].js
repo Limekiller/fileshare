@@ -14,6 +14,7 @@ const success = () => {
         <Head>
           <title>SHARE</title>
           <link rel="icon" href="/favicon.ico" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         </Head>
 
         <main>
@@ -47,6 +48,17 @@ const success = () => {
           margin: 0 auto;
           margin-top:15vh;
           text-align:center;
+        }
+        @media (max-width: 500px) {
+          h1 {
+              font-size: 110px;
+          }
+          h2 {
+              font-size: 30px;
+          }
+          h2 a {
+            line-height: 50px;
+          }
         }
       `}</style>
     </>
