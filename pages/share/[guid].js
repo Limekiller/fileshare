@@ -58,6 +58,7 @@ const success = () => {
           }
           h2 a {
             line-height: 50px;
+            word-wrap: break-word;
           }
         }
       `}</style>

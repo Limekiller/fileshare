@@ -5,15 +5,15 @@ import Link from 'next/link'
 export default function Footer() {
     return (
         <footer className={styles.footer}>
-            <div class='flex'>
+            <div className='flex'>
                 <Link href='/'>
-                    <a><i class="fas fa-home"></i></a>
+                    <a><i className="fas fa-home"></i></a>
                 </Link>
                 <Link href='/share'>
-                    <a><i class="fas fa-file-upload"></i></a>
+                    <a><i className="fas fa-file-upload"></i></a>
                 </Link>
                 <Link href='/download'>
-                    <a><i class="fas fa-file-download"></i></a>
+                    <a><i className="fas fa-file-download"></i></a>
                 </Link>
 
             </div>

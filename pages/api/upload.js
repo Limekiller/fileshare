@@ -15,6 +15,10 @@ export default (req, res) => {
         const form = new formidable.IncomingForm();
         form.uploadDir = "./uploads/" + guid;
         form.keepExtensions = true;
+        form.on('fileBegin', (name, file) => {
+            file.path = form.uploadDir + '/' + file.name;
+        });
+
         form.parse(req, (err, fields, files) => {
             res.writeHead(200, { 'content-type': 'application/json' });
             res.end(JSON.stringify({ files, 'guid':guid }, null, 2));
