@@ -56,6 +56,7 @@ export default class UploadBox extends Component {
                 <div 
                     type='file' 
                     multiple 
+                    id='uploadBox'
                     className={`
                         flex wrap
                         ${styles.uploadBox} 
@@ -107,6 +108,10 @@ export default class UploadBox extends Component {
     }
 
     uploadFiles(e) {
+        if (!document.querySelector('#uploadBox').hasChildNodes()) {
+            return false;
+        }
+
         const formData = new FormData();
         this.state.files.forEach((file, index) => {
             formData.append(file.name, file);
