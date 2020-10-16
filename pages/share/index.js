@@ -2,6 +2,7 @@ import Head from 'next/head'
 import TitleCard from 'components/TitleCard/titleCard.js'
 import Layout from 'components/layout.js'
 import UploadBox from 'components/UploadBox/uploadBox.js'
+import { server } from 'config';
 
 export default function Home() {
     return (
@@ -28,3 +29,4 @@ export default function Home() {
       </>
     )
 }
+

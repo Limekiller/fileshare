@@ -67,3 +67,12 @@
         width: 80px;
     }
 }
+.loadingBar {
+    position: fixed;
+    width: 0vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background: #65ffcc;
+    z-index: 99;
+}

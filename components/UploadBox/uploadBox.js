@@ -1,5 +1,6 @@
 import { Component } from 'react'
 import { withRouter } from 'next/router'
+import io from 'socket.io-client';
 
 import styles from './uploadBox.module.scss'
 
@@ -46,6 +47,7 @@ export default class UploadBox extends Component {
     render() {
         return (
             <>
+                <div id='loadingBar' className={styles.loadingBar}/>
                 <input 
                     id='fileInput' 
                     className={ styles.fileInput } 
@@ -108,6 +110,7 @@ export default class UploadBox extends Component {
     }
 
     uploadFiles(e) {
+
         if (!document.querySelector('#uploadBox').hasChildNodes()) {
             return false;
         }
@@ -117,14 +120,33 @@ export default class UploadBox extends Component {
             formData.append(file.name, file);
         });
 
-        fetch('/api/upload', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.text())
-        .then(data => {
-            data = JSON.parse(data);
-            window.location.href = '/share/' + data['guid'];
+        
+
+        fetch('/api/upload').finally(() => {
+            const socket = io()
+
+            fetch('/api/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                data = JSON.parse(data);
+                window.location.href = '/share/' + data['guid'];
+            })
+
+            socket.on('connect', () => {
+                console.log('connect')
+                socket.emit('hello')
+            })
+
+            socket.on('hello', data => {
+                console.log('hello', data)
+            })
+
+            socket.on('uploadProgress', percent => {
+                document.querySelector('#loadingBar').style.width = percent + 'vw';
+            });
         })
     }
 }

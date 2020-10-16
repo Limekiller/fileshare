@@ -1,2 +1,2 @@
 const dev = process.env.NODE_ENV !== 'production';
-export const server = dev ? 'http://localhost:3000' : 'https://fileshare.bryceyoder.com';
+export const server = dev ? 'http://localhost:3000' : 'http://fileshare.bryceyoder.com';
