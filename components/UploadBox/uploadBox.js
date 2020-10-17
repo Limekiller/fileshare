@@ -133,17 +133,8 @@ export default class UploadBox extends Component {
                 window.location.href = '/share/' + data['guid'];
             })
 
-            socket.on('connect', () => {
-                console.log('connect')
-                socket.emit('hello')
-            })
-
-            socket.on('hello', data => {
-                console.log('hello', data)
-            })
-
             socket.on('uploadProgress', percent => {
-                document.querySelector('#loadingBar').style.width = percent*2 + 'vw';
+                document.querySelector('#loadingBar').style.width = percent + 'vw';
             });
         })
     }
