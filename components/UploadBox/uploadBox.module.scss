@@ -75,4 +75,9 @@
     left: 0;
     background: #65ffcc;
     z-index: 99;
+
+    .loadingPercent {
+        margin-top: 45vh;
+        font-size: 70px;
+    }
 }
