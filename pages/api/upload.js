@@ -25,7 +25,7 @@ export default (req, res) => {
         });
         form.on('progress', (recv, exp) => {
             const percent = (recv / exp) * 100;
-            res.socket.server.io.sockets.in('sessionId').emit('uploadProgress', percent);
+            res.socket.server.io.emit('uploadProgress', percent);
         });
 
         //form.parse(req);
