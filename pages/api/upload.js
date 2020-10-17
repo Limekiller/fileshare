@@ -18,23 +18,25 @@ export default (req, res) => {
         
         form.uploadDir = "./uploads/" + guid;
         form.keepExtensions = true;
+        form.maxFileSize = 10000 * 1024 * 1024;
 
         form.on('fileBegin', (name, file) => {
             file.path = form.uploadDir + '/' + file.name;
         });
         form.on('progress', (recv, exp) => {
             const percent = (recv / exp) * 100;
-            res.socket.server.io.emit('uploadProgress', percent);
+            res.socket.server.io.sockets.in('sessionId').emit('uploadProgress', percent);
         });
 
+        //form.parse(req);
         setTimeout(() => {
             form.parse(req, (err, fields, files) => {
                 res.writeHead(200, { 'content-type': 'application/json' });
                 res.end(JSON.stringify({ files, 'guid':guid }, null, 2));
                 zipDirectory(guid);
-                res.end();
             });
         }, 50);
+
     } else {
         if (!res.socket.server.io) {
             console.log('*First use, starting socket.io')
@@ -42,7 +44,6 @@ export default (req, res) => {
             const io = new Server(res.socket.server)
             io.on('connection', socket => {
                 socket.broadcast.emit('a user connected')
-
                 socket.on('hello', msg => {
                     socket.emit('hello', 'world!')
                 })

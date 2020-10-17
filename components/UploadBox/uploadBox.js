@@ -120,8 +120,6 @@ export default class UploadBox extends Component {
             formData.append(file.name, file);
         });
 
-        
-
         fetch('/api/upload').finally(() => {
             const socket = io()
 
@@ -145,7 +143,7 @@ export default class UploadBox extends Component {
             })
 
             socket.on('uploadProgress', percent => {
-                document.querySelector('#loadingBar').style.width = percent + 'vw';
+                document.querySelector('#loadingBar').style.width = percent*2 + 'vw';
             });
         })
     }

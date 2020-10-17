@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { server } from 'config';
+import { serverConfig } from 'server';
 import Head from 'next/head'
 import Layout from 'components/layout.js'
 import Link from 'next/link'
@@ -20,8 +20,8 @@ const success = () => {
         <main>
           <h2>Your code</h2>
           <h1>{guid}</h1>
-          <Link href={`${server}/download/${guid}`}><h2><a>
-            {server}/download/{guid}
+          <Link href={`${serverConfig['uri']}/download/${guid}`}><h2><a>
+            {serverConfig['uri']}/download/{guid}
           </a></h2></Link>
         </main>
 
