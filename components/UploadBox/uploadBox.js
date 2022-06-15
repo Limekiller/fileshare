@@ -3,6 +3,7 @@ import { withRouter } from 'next/router'
 import io from 'socket.io-client';
 
 import styles from './uploadBox.module.scss'
+import JSZip from 'jszip';
 
 export default class UploadBox extends Component {
 
@@ -37,11 +38,18 @@ export default class UploadBox extends Component {
         e.stopPropagation();
         e.preventDefault();
 
-        const dt = e.dataTransfer;
-        const files = dt.files;
+        const items = e.dataTransfer.items;
+        let entries = [];
+        for (let i = 0; i < items.length; i++) {
+            entries.push(items[i].webkitGetAsEntry());
+        }
+        let files = [];
+        this.handleEntries(entries, files);
 
-        this.handleFiles(files);
-        this.setState({ hovered: false })
+        setTimeout(() => {
+            this.setState({files: files})
+        }, 100);
+        this.setState({hovered: false})
     };
 
     render() {
@@ -54,12 +62,11 @@ export default class UploadBox extends Component {
                     id='fileInput'
                     className={ styles.fileInput }
                     type="file"
-                    multiple
-                    onChange={e => this.handleFiles()}
+                    multiple=""
+                    onChange={e => this.handleEntries()}
                 />
                 <div
                     type='file'
-                    multiple
                     id='uploadBox'
                     className={`
                         flex wrap
@@ -73,7 +80,7 @@ export default class UploadBox extends Component {
                     onClick={e => this.handleClick(e)}
                 >
                     {this.state.files.map((file, index) => (
-                        <div className={styles.file}>
+                        <div className={styles.file} key={file.webkitRelativePath}>
                             <i className={this.getFileType(file)}></i>
                             <span className={styles.filename}>{file.name}</span>
                         </div>
@@ -86,21 +93,26 @@ export default class UploadBox extends Component {
         )
     }
 
-    handleFiles(files=null) {
-        if (files === undefined || files === null) {
-            const fileInput = document.querySelector('#fileInput');
-            files = fileInput.files;
+    handleEntries(entries=null, files=[]) {
+        if (entries == null) {
+            const inputFiles = document.querySelector('#fileInput').files;
+            for (let i = 0; i < inputFiles.length; i++) {
+                files.push(inputFiles[i]);
+            }
+            this.setState({files: files});
+        } else {
+            entries.forEach(entry => {
+                if (entry.isDirectory) {
+                    entry.createReader().readEntries(entries => this.handleEntries(entries, files));
+                } else {
+                    entry.file(file => files.push(file));
+                }
+            })
         }
-
-        let filesToMerge = [];
-        for (let i = 0; i < files.length; i++) {
-            filesToMerge.push(files[i]);
-        }
-
-        this.setState({ files: filesToMerge });
     }
 
     getFileType(file) {
+        let typeIcon = 'fas fa-file-alt'
         const typeIcons = {
             'image': 'fas fa-file-image',
             'video': 'fas fa-file-video',
@@ -108,7 +120,11 @@ export default class UploadBox extends Component {
             'font': 'fas fa-font',
             'text': 'fas fa-file-alt',
         }
-        return typeIcons[file.type.split('/')[0]];
+        if (typeIcons[file.type.split('/')[0]]) {
+            typeIcon = typeIcons[file.type.split('/')[0]]
+        }
+
+        return typeIcon;
     }
 
     uploadFiles(e) {
@@ -117,28 +133,37 @@ export default class UploadBox extends Component {
             return false;
         }
 
-        const formData = new FormData();
+        let zip = new JSZip();
         this.state.files.forEach((file, index) => {
-            formData.append(file.name, file);
+            if (file.webkitRelativePath !== '') {
+                zip.file(file.webkitRelativePath, file, {createFolders: true});
+            } else {
+                zip.file(file.name, file, {createFolders: true})
+            }
         });
 
-        fetch('/api/upload').finally(() => {
-            const socket = io()
-
-            fetch('/api/upload', {
-                method: 'POST',
-                body: formData
+        zip.generateAsync({type:"blob"}).then(function(content) {
+            let formData = new FormData();
+            formData.append('upload.zip', content);
+    
+            fetch('/api/upload').finally(() => {
+                const socket = io()
+    
+                fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(data => {
+                    data = JSON.parse(data);
+                    window.location.href = '/share/' + data['guid'];
+                })
+    
+                socket.on('uploadProgress', percent => {
+                    document.querySelector('#loadingBar').style.width = percent + 'vw';
+                    document.querySelector('#loadingPercent').innerHTML = percent.toFixed(2) + '%';
+                });
             })
-            .then(response => response.text())
-            .then(data => {
-                data = JSON.parse(data);
-                window.location.href = '/share/' + data['guid'];
-            })
-
-            socket.on('uploadProgress', percent => {
-                document.querySelector('#loadingBar').style.width = percent + 'vw';
-                document.querySelector('#loadingPercent').innerHTML = percent.toFixed(2) + '%';
-            });
         })
     }
 }

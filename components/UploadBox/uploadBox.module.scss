@@ -51,6 +51,7 @@
     height: min-content;
     background: #eee;
     z-index: 2;
+    animation: expand 0.4s ease;
 
     svg {
         font-size: 70px;
@@ -61,6 +62,7 @@
         display:block;
         font-size: 12px;
         margin-top: 10px;
+        line-break: anywhere;
     }
 
     @media (max-width: 600px) {
@@ -80,4 +82,9 @@
         margin-top: 45vh;
         font-size: 70px;
     }
+}
+
+@keyframes expand {
+    from {opacity: 0; transform: scale(0.9);}
+    to {opacity: 1; transform: scale(1);}
 }
