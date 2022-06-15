@@ -43,6 +43,7 @@ export default class UploadBox extends Component {
         for (let i = 0; i < items.length; i++) {
             entries.push(items[i].webkitGetAsEntry());
         }
+        console.log(entries)
         let files = [];
         this.handleEntries(entries, files);
 
@@ -62,7 +63,7 @@ export default class UploadBox extends Component {
                     id='fileInput'
                     className={ styles.fileInput }
                     type="file"
-                    multiple=""
+                    multiple
                     onChange={e => this.handleEntries()}
                 />
                 <div
