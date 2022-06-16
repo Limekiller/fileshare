@@ -11,7 +11,8 @@ export default class UploadBox extends Component {
         super(props);
         this.state = {
             hovered: false,
-            files: []
+            files: [],
+            folders: []
         };
     }
 
@@ -43,8 +44,8 @@ export default class UploadBox extends Component {
         for (let i = 0; i < items.length; i++) {
             entries.push(items[i].webkitGetAsEntry());
         }
-        console.log(entries)
         let files = [];
+        this.setState({folders: []})
         this.handleEntries(entries, files);
 
         setTimeout(() => {
@@ -80,10 +81,17 @@ export default class UploadBox extends Component {
                     onDragLeave={e => this.handleDragLeave(e)}
                     onClick={e => this.handleClick(e)}
                 >
+                    {this.state.folders.map((folder, index) => (
+                        <div className={styles.file} key={folder}>
+                            <i className='fas fa-folder'></i>
+                            <span className={`${styles.filename} filename`}>{folder}</span>
+                        </div>
+                    ))}
                     {this.state.files.map((file, index) => (
-                        <div className={styles.file} key={file.webkitRelativePath}>
+                        this.state.folders.includes(file.webkitRelativePath.split('/')[0]) ? '' :
+                        <div className={styles.file} key={`${file.webkitRelativePath}/${file.name}`}>
                             <i className={this.getFileType(file)}></i>
-                            <span className={styles.filename}>{file.name}</span>
+                            <span className={`${styles.filename} filename`}>{file.name}</span>
                         </div>
                     ))}
                 </div>
@@ -104,6 +112,13 @@ export default class UploadBox extends Component {
         } else {
             entries.forEach(entry => {
                 if (entry.isDirectory) {
+                    let folders = this.state.folders;
+                    const topLevelFolder = entry.fullPath.split('/')[1]
+                    if (!this.state.folders.includes(topLevelFolder)) {
+                        folders.push(topLevelFolder);
+                    }
+                    this.setState({folders: folders});
+
                     entry.createReader().readEntries(entries => this.handleEntries(entries, files));
                 } else {
                     entry.file(file => files.push(file));
