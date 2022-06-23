@@ -83,6 +83,12 @@
         font-size: 70px;
     }
 }
+.uploadButton {
+    &.disabled {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+}
 
 @keyframes expand {
     from {opacity: 0; transform: scale(0.9);}

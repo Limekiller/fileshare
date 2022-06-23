@@ -10,6 +10,7 @@ export default class UploadBox extends Component {
     constructor({props, router}) {
         super(props);
         this.state = {
+            buttonState: 'Upload',
             hovered: false,
             files: [],
             folders: []
@@ -81,12 +82,14 @@ export default class UploadBox extends Component {
                     onDragLeave={e => this.handleDragLeave(e)}
                     onClick={e => this.handleClick(e)}
                 >
+                    
                     {this.state.folders.map((folder, index) => (
                         <div className={styles.file} key={folder}>
                             <i className='fas fa-folder'></i>
                             <span className={`${styles.filename} filename`}>{folder}</span>
                         </div>
                     ))}
+
                     {this.state.files.map((file, index) => (
                         this.state.folders.includes(file.webkitRelativePath.split('/')[0]) ? '' :
                         <div className={styles.file} key={`${file.webkitRelativePath}/${file.name}`}>
@@ -94,9 +97,18 @@ export default class UploadBox extends Component {
                             <span className={`${styles.filename} filename`}>{file.name}</span>
                         </div>
                     ))}
+
                 </div>
                 <div className="flex center pad-bottom">
-                    <button onClick={e => this.uploadFiles(e)}>Upload</button>
+                    <button 
+                        className={`
+                            ${styles.uploadButton} 
+                            ${this.state.buttonState == 'Upload' ? '' : styles.disabled}
+                        `} 
+                        onClick={e => this.uploadFiles(e)}
+                    >
+                        {this.state.buttonState}
+                    </button>
                 </div>
             </>
         )
@@ -144,8 +156,10 @@ export default class UploadBox extends Component {
     }
 
     uploadFiles(e) {
+        this.setState({buttonState: 'Processing...'});
 
         if (!document.querySelector('#uploadBox').hasChildNodes()) {
+            this.setState({buttonState: 'Upload'});
             return false;
         }
 
@@ -158,11 +172,12 @@ export default class UploadBox extends Component {
             }
         });
 
-        zip.generateAsync({type:"blob"}).then(function(content) {
+        zip.generateAsync({type:"blob"}).then(content => {
             let formData = new FormData();
             formData.append('upload.zip', content);
     
             fetch('/api/upload').finally(() => {
+                this.setState({buttonState: 'Uploading...'});
                 const socket = io()
     
                 fetch('/api/upload', {
